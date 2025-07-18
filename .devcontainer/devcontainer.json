@@ -1,0 +1,21 @@
+{
+    "name": "Serverless Practice",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "python",
+    "workspaceFolder": "/data",
+    "postCreateCommand": "task setup",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "editorconfig.editorconfig", // エディタを跨いだ共通設定ファイルをVsCodeで実行するのに必要
+                "ms-azuretools.vscode-docker", // VsCodeでのIntelliSenseやタブ補完用
+                "streetsidesoftware.code-spell-checker", // スペルチェック
+                "saoudrizwan.claude-dev", // AIコーディングサポート
+                "ms-python.flake8", // Lint
+                "ms-python.mypy-type-checker", // 型チェック
+                "ms-python.black-formatter", // フォーマッタ
+                "ms-python.isort" // importグルーピング・並び順を自動整形
+            ]
+        }
+    }
+}

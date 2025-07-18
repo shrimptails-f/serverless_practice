@@ -1,0 +1,46 @@
+version: "3"
+services:
+  python:
+    build:
+      context: ../
+      dockerfile: .devcontainer/infra/python/Dockerfile
+    env_file:
+      - .env
+    tty: true
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ../:/data
+      - ~/.gitconfig:/data/.gitconfig
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - ${MYSQL_PORT}:3306
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ../.devcontainer/infra/mysql/:/docker-entrypoint-initdb.d/
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+
+  localstack:
+    image: localstack/localstack:4.6
+    ports:
+      - ${LOCALSTACK_PORT}:4566
+    environment:
+      - SERVICES=lambda,apigateway,dynamodb,cloudformation,s3,iam,sts,logs
+      - DEBUG=1
+      - LAMBDA_DOCKER_FLAGS=-e DOCKER_LAMBDA_STAY_OPEN=1
+      - LAMBDA_REMOVE_CONTAINERS=false
+      - LAMBDA_EXECUTOR=docker-reuse
+      - LAMBDA_KEEPALIVE_MS=600000
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+volumes:
+  db-data:
+    driver: local

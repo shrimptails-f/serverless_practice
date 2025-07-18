@@ -1,0 +1,84 @@
+service: lambda-demo-python
+
+provider:
+  name: aws
+  runtime: python3.9
+  stage: dev
+  region: us-east-1
+  environment:
+    PYTHONPATH: "${PYTHONPATH}:/var/task"
+
+plugins:
+  - serverless-offline
+  - serverless-localstack
+  - serverless-python-requirements
+
+custom:
+  localstack:
+    stages:
+      - dev
+    host: http://localstack
+    edgePort: 4566
+    autostart: false
+    lambda:
+      mountCode: false
+      timeout: 30
+    apigateway:
+      # API Gateway統合の安定化
+      description: Lambda Demo API
+  pythonRequirements:
+    dockerizePip: non-linux
+    slim: true
+    strip: false
+
+functions:
+  hello:
+    handler: handler.hello
+    timeout: 30
+    memorySize: 128
+    events:
+      - http:
+          path: hello
+          method: get
+          cors: true
+    environment:
+      LOG_LEVEL: INFO
+
+  users:
+    handler: handler.get_users
+    timeout: 30
+    memorySize: 128
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
+
+  user:
+    handler: handler.get_user
+    timeout: 30
+    memorySize: 128
+    events:
+      - http:
+          path: users/{id}
+          method: get
+          cors: true
+
+package:
+  exclude:
+    - node_modules/**
+    - .git/**
+    - .pytest_cache/**
+    - __pycache__/**
+    - "*.pyc"
+    - .env
+    - README.md
+    - tests/**
+    - .devcontainer/**
+    - docker-compose.yml
+    - Taskfile.yml
+    - bootstrap  # Goビルド成果物を除外
+    - main.go    # Goソースを除外
+  include:
+    - handler.py
+    - requirements.txt

@@ -1,0 +1,82 @@
+# https://taskfile.dev
+
+version: '3'
+
+env:
+  # MIGRATION_ROOT: "tools/migrations"
+  # SEED_ROOT: "tools/seeder"
+  LOCALSTACK_HOST: http://localstack
+
+tasks:
+  setup:
+    desc: "ローカル環境のセットアップを行う。(gitコマンドが使用できるようにする)"
+    cmds:
+      - cp {{.APP_ROOT}}/.gitconfig /root/.gitconfig
+      - git config --global core.autocrlf input
+      - git config --global --add safe.directory {{.APP_ROOT}}
+      - npm install
+      - aws configure set aws_access_key_id test
+      - aws configure set aws_secret_access_key test
+      - aws configure set default.region ap-northeast-1
+      - aws configure set default.output json
+      - serverless plugin install -n serverless-python-requirements
+      - serverless plugin install -n serverless-localstack
+      # - chmod +x {{.APP_ROOT}}/.github/hooks/pre-commit
+      # - git config core.hooksPath {{.APP_ROOT}}/.github/hooks
+      # わざわざコピーする理由は、commit時に毎回メアドとユーザー名の設定(.gitconfigの作成)を求められ面倒なので、git cloneするなら作成済みであろう.gitconfigを使うという魂胆である。
+      # だが、Windowsユーザーが.gitconfigを使用中と解釈されるようでgit configコマンドが失敗するため、ファイルをコピーする必要がある。
+      # core.autocrlf inputを使用する理由は、Linuxの改行コードが原因で差分が表示されてしまうため。
+      # safe.directory $APP_ROOTを使用する理由は、WSL2側に配置しgitを使うには毎回求められるため。
+
+  local-deploy:
+    desc: "Python版をLocalStackにデプロイ"
+    cmds:
+      - serverless deploy --stage dev --force
+
+  production-deploy-aws:
+    desc: "Python版を本番AWSにデプロイ"
+    cmds:
+      - serverless deploy --stage prod --force
+
+  lambda-test:
+    desc: "Python Lambda関数をテスト"
+    cmds:
+      - pytest tests/ -v
+
+  test-api-dynamic:
+    desc: "API IDを動的に取得してテスト"
+    cmds:
+      - |
+        API_ID=$(aws --endpoint-url=http://localstack:4566 apigateway get-rest-apis --query 'items[0].id' --output text)
+        BASE_URL="http://localstack:4566/restapis/$API_ID/dev/_user_request_"
+        echo "Base URL: $BASE_URL"
+        echo ""
+        echo "=== Hello エンドポイントテスト ==="
+        curl -v "$BASE_URL/hello"
+        echo ""
+        echo "=== Users エンドポイントテスト ==="
+        curl -v "$BASE_URL/users"
+        echo ""
+        echo "=== User詳細エンドポイントテスト ==="
+        curl -v "$BASE_URL/users/1"
+
+  test-api:
+    desc: "Go API Gateway経由でテスト"
+    cmds:
+      - |
+        ENDPOINT=$(serverless info --stage dev | grep "endpoint:" | awk '{print $2}' | sed 's/localhost/localstack/')
+        echo "Testing: $ENDPOINT/hello"
+        curl -v "$ENDPOINT/hello"
+
+  test-lambda:
+    desc: "Go Lambda関数を直接テスト"
+    cmds:
+      - |
+        curl -X POST http://localstack:4566/2015-03-31/functions/lambda-demo-dev-hello/invocations \
+          -H "Content-Type: application/json" \
+          -d '{"name": "World"}'
+
+  test-offline:
+    desc: "serverless-offlineでテスト"
+    cmds:
+      - curl -v http://localhost:3000/dev/hello

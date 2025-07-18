@@ -1,0 +1,87 @@
+{
+    // VSCode全体設定
+    "editor.detectIndentation": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "always"
+    },
+    "[python]": {
+        "editor.wordSeparators": "`~!$#%^-=+[{()]}\\|;:'\",.<>?",
+        "editor.defaultFormatter": "ms-python.black-formatter",
+    },
+    "python.defaultInterpreterPath": "/usr/local/bin/python",
+    "isort.args": [
+        "--profile",
+        "black"
+    ],
+    "flake8.args": [
+        "--max-line-length",
+        "88",
+        "--ignore",
+        "D100,D105,D107,D202,D205,D400,T499,W503"
+    ],
+    "mypy-type-checker.args": [
+        "--python-version",
+        "3.9",
+        "--ignore-missing-imports",
+        "--disallow-untyped-defs",
+        "--disallow-untyped-calls",
+        "--show-error-codes",
+        "--explicit-package-bases",
+        "--namespace-packages"
+    ],
+    "editor.wordSeparators": "`*&~!$#%^=+[{()]}/\\|;:'\",.<>?",
+    // スペルチェックの除外単語設定
+    "cSpell.ignoreWords": [
+        // python
+        "mypy",
+        "isort",
+        "pytest",
+        // MySQL / SQL関連
+        "aidarkhanov",
+        "dsn",
+        "sqlx",
+        "tx",
+        "varchar",
+        "int",
+        "tinyint",
+        "datetime",
+        "initdb",
+        "mysqld",
+        "mysqladmin",
+        "googleusercontent",
+        // WebAPI・一般的な開発用語
+        "myapp",
+        "tmpl",
+        "api",
+        "req",
+        "res",
+        "http",
+        "https",
+        "json",
+        "jwt",
+        "uuid",
+        "csrf",
+        "cli",
+        "sdk",
+        "idempotent",
+        "middleware",
+        "multiclient",
+        "saoudrizwan",
+        "valueobject",
+        "localstack",
+        "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz",
+        // 日本語由来や略語
+        "kana",
+        "hira",
+        "zenkaku",
+        "hankaku",
+        "meisyo",
+        "toroku",
+        "kensaku",
+        "shain",
+        "shozoku",
+        "simei",
+        "kigou"
+    ]
+}

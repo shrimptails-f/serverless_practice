@@ -1,0 +1,35 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "ローカルデプロイ",
+            "type": "shell",
+            "command": "task local-deploy"
+        },
+        {
+            "label": "offline start",
+            "type": "shell",
+            "command": "serverless offline start"
+        },
+        // {
+        //     "label": "テーブル削除",
+        //     "type": "shell",
+        //     "command": "task migration-drop"
+        // },
+        // {
+        //     "label": "テーブル作成",
+        //     "type": "shell",
+        //     "command": "task migration-create"
+        // },
+        // {
+        //     "label": "テーブルリフレッシュ(削除→作成)",
+        //     "type": "shell",
+        //     "command": "task migration-fresh"
+        // },
+        // {
+        //     "label": "サンプルデータ投入",
+        //     "type": "shell",
+        //     "command": "task seed"
+        // },
+    ],
+}

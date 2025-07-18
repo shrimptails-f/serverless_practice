@@ -1,0 +1,41 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.gitconfig
+.serverless
+.mypy_cache
+__pycache__
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env
+.env
+.docker
+
+# air(ホットリロード)で勝手に更新されるので除外
+/tmp/*
+__debug_bin*
+
+# ビルドファイル
+main
+
+# 多分コンテナ作成時に勝手に作成されるキャッシュなので除外
+.attach_pid*
+
+# GoLand用のリモートコンテナ作成時勝手に作成されるので削除。
+.idea
+ide
+
+# カバレッジ率
+coverage.out
+coverage.html
