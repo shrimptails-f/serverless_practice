@@ -6,11 +6,11 @@
             "type": "shell",
             "command": "task local-deploy"
         },
-        {
-            "label": "offline start",
-            "type": "shell",
-            "command": "serverless offline start"
-        },
+        // {
+        //     "label": "offline start",
+        //     "type": "shell",
+        //     "command": "serverless offline start"
+        // },
         // {
         //     "label": "テーブル削除",
         //     "type": "shell",
