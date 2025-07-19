@@ -2,6 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "pip freeze",
+            "type": "shell",
+            "command": "pip freeze > requirements.txt"
+        },
+        {
+            "label": "pip install for requirements.txt",
+            "type": "shell",
+            "command": "pip install -r requirements.txt"
+        },
+        {
             "label": "ローカルデプロイ",
             "type": "shell",
             "command": "task local-deploy"

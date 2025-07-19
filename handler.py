@@ -3,9 +3,21 @@ import logging
 import os
 from typing import Any, Dict
 
+import boto3
+
 # ログ設定
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# DynamoDBクライアント初期化
+dynamodb = boto3.resource(
+    "dynamodb",
+    endpoint_url="http://localstack:4566",
+    region_name="ap-northeast-1",
+    aws_access_key_id="test",
+    aws_secret_access_key="test",
+)
+table = dynamodb.Table("Users")
 
 
 def create_response(status_code: int, body: Dict[str, Any]) -> Dict[str, Any]:
@@ -24,33 +36,41 @@ def create_response(status_code: int, body: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def create_response_with_headers(
-    status_code: int, body: Dict[str, Any], headers: Dict[str, str]
-) -> Dict[str, Any]:
-    """カスタムヘッダー付きのAPI Gateway用レスポンスを生成"""
-    default_headers = {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-    }
+def get_users(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
+    """ユーザー一覧取得エンドポイント"""
+    try:
+        logger.info(f"Event: {json.dumps(event)}")
 
-    default_headers.update(headers)
+        # DynamoDBからユーザー一覧を取得
+        response = table.scan()
+        items = response.get("Items", [])
 
-    return {
-        "statusCode": status_code,
-        "headers": default_headers,
-        "body": json.dumps(body, ensure_ascii=False),
-    }
+        # DynamoDBのデータ形式を変換
+        users = []
+        for item in items:
+            users.append(
+                {"id": int(item["id"]), "name": item["name"], "email": item["email"]}
+            )
+
+        response_body = {
+            "users": users,
+            "count": len(users),
+            "timestamp": context.aws_request_id,
+        }
+
+        logger.info(f"Returning {len(users)} users")
+        return create_response(200, response_body)
+
+    except Exception as e:
+        logger.error(f"Error in get_users function: {str(e)}")
+        return create_response(500, {"error": "Internal server error"})
 
 
 def hello(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """Hello World エンドポイント"""
-
     try:
         logger.info(f"Event: {json.dumps(event)}")
 
-        # クエリパラメータから名前を取得
         query_params = event.get("queryStringParameters") or {}
         name = query_params.get("name", "World")
 
@@ -69,38 +89,11 @@ def hello(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         return create_response(500, {"error": "Internal server error"})
 
 
-def get_users(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
-    """ユーザー一覧取得エンドポイント"""
-    try:
-        logger.info(f"Event: {json.dumps(event)}")
-
-        # サンプルユーザーデータ
-        users = [
-            {"id": 1, "name": "Alice", "email": "alice@example.com"},
-            {"id": 2, "name": "Bob", "email": "bob@example.com"},
-            {"id": 3, "name": "Charlie", "email": "charlie@example.com"},
-        ]
-
-        response_body = {
-            "users": users,
-            "count": len(users),
-            "timestamp": context.aws_request_id,
-        }
-
-        logger.info(f"Returning {len(users)} users")
-        return create_response(200, response_body)
-
-    except Exception as e:
-        logger.error(f"Error in get_users function: {str(e)}")
-        return create_response(500, {"error": "Internal server error"})
-
-
 def get_user(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """特定ユーザー取得エンドポイント"""
     try:
         logger.info(f"Event: {json.dumps(event)}")
 
-        # パスパラメータからIDを取得
         path_params = event.get("pathParameters") or {}
         user_id = path_params.get("id")
 
@@ -112,26 +105,18 @@ def get_user(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         except ValueError:
             return create_response(400, {"error": "Invalid user ID format"})
 
-        # サンプルユーザーデータ（実際にはDBから取得）
-        users = {
-            1: {
-                "id": 1,
-                "name": "Alice",
-                "email": "alice@example.com",
-                "role": "admin",
-            },
-            2: {"id": 2, "name": "Bob", "email": "bob@example.com", "role": "user"},
-            3: {
-                "id": 3,
-                "name": "Charlie",
-                "email": "charlie@example.com",
-                "role": "user",
-            },
-        }
+        # DynamoDBから特定ユーザーを取得
+        response = table.get_item(Key={"id": str(user_id)})
+        item = response.get("Item")
 
-        user = users.get(user_id)
-        if not user:
+        if not item:
             return create_response(404, {"error": "User not found"})
+
+        user = {
+            "id": int(item["id"]),
+            "name": item["name"],
+            "email": item["email"],
+        }
 
         response_body = {"user": user, "timestamp": context.aws_request_id}
 
