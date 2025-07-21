@@ -17,6 +17,7 @@ tasks:
       - npm install
       - serverless plugin install -n serverless-python-requirements
       - serverless plugin install -n serverless-localstack
+      - pip install -r requirements.txt
       # - chmod +x {{.APP_ROOT}}/.github/hooks/pre-commit
       # - git config core.hooksPath {{.APP_ROOT}}/.github/hooks
       # わざわざコピーする理由は、commit時に毎回メアドとユーザー名の設定(.gitconfigの作成)を求められ面倒なので、git cloneするなら作成済みであろう.gitconfigを使うという魂胆である。
@@ -96,8 +97,8 @@ tasks:
     cmds:
       - |
         ENDPOINT=$(serverless info --stage dev | grep "endpoint:" | awk '{print $2}' | sed 's/localhost/localstack/')
-        echo "Testing: $ENDPOINT/hello"
-        curl -v "$ENDPOINT/hello"
+        echo "Testing: $ENDPOINT/users"
+        curl -v "$ENDPOINT/users"
 
   test-lambda:
     desc: "Go Lambda関数を直接テスト"

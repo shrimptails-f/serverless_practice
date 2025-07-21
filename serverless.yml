@@ -5,8 +5,6 @@ provider:
   runtime: python3.9
   stage: dev
   region: ap-northeast-1
-  apiGateway:
-    restApiId: zo37yohfls
 
 plugins:
   # - serverless-offline
@@ -19,6 +17,8 @@ custom:
       - dev
     host: http://localstack
     edgePort: 4566
+    apiGateway:
+      restApiId: hqbfcj2rmp
 
 functions:
   hello:
