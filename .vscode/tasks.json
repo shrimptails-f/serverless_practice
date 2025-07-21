@@ -4,7 +4,7 @@
         {
             "label": "setup",
             "type": "shell",
-            "command": "task create-apigateway && task create-table"
+            "command": "task create-apigateway && task create-table && task aws-configure-setup"
         },
         {
             "label": "pip freeze",

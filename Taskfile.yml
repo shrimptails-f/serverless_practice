@@ -15,10 +15,6 @@ tasks:
       - git config --global core.autocrlf input
       - git config --global --add safe.directory {{.APP_ROOT}}
       - npm install
-      - aws configure set aws_access_key_id test
-      - aws configure set aws_secret_access_key test
-      - aws configure set default.region ap-northeast-1
-      - aws configure set default.output json
       - serverless plugin install -n serverless-python-requirements
       - serverless plugin install -n serverless-localstack
       # - chmod +x {{.APP_ROOT}}/.github/hooks/pre-commit
@@ -27,6 +23,14 @@ tasks:
       # だが、Windowsユーザーが.gitconfigを使用中と解釈されるようでgit configコマンドが失敗するため、ファイルをコピーする必要がある。
       # core.autocrlf inputを使用する理由は、Linuxの改行コードが原因で差分が表示されてしまうため。
       # safe.directory $APP_ROOTを使用する理由は、WSL2側に配置しgitを使うには毎回求められるため。
+
+  aws-configure-setup:
+    desc: "aws configure setup"
+    cmds:
+      - aws configure set aws_access_key_id test
+      - aws configure set aws_secret_access_key test
+      - aws configure set default.region ap-northeast-1
+      - aws configure set default.output json
 
   create-apigateway:
     desc: "create user table"
