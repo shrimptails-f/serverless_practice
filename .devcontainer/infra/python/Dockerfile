@@ -70,7 +70,7 @@ COPY --from=task-runner /usr/local/bin/task /usr/local/bin/task
 ENV PATH="/usr/local/bin:$PATH"
 
 # bashrcのコピー
-COPY .devcontainer/infra/go/.bashrc /root/.bashrc
+COPY .devcontainer/infra/python/.bashrc /root/.bashrc
 
 # SSH keychain設定
 RUN eval `keychain --eval --agents ssh id_rsa`

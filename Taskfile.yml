@@ -1,6 +1,6 @@
 # https://taskfile.dev
 
-version: '3'
+version: "3"
 
 env:
   # MIGRATION_ROOT: "tools/migrations"
@@ -21,7 +21,6 @@ tasks:
       - aws configure set default.output json
       - serverless plugin install -n serverless-python-requirements
       - serverless plugin install -n serverless-localstack
-      - task create-table
       # - chmod +x {{.APP_ROOT}}/.github/hooks/pre-commit
       # - git config core.hooksPath {{.APP_ROOT}}/.github/hooks
       # わざわざコピーする理由は、commit時に毎回メアドとユーザー名の設定(.gitconfigの作成)を求められ面倒なので、git cloneするなら作成済みであろう.gitconfigを使うという魂胆である。

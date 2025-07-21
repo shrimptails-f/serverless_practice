@@ -51,6 +51,7 @@
         "mysqladmin",
         "googleusercontent",
         // WebAPI・一般的な開発用語
+        "esbenp",
         "myapp",
         "tmpl",
         "api",

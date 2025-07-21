@@ -11,7 +11,7 @@ provider:
 plugins:
   # - serverless-offline
   - serverless-localstack
-  # - serverless-python-requirements
+  - serverless-python-requirements
 
 custom:
   localstack:

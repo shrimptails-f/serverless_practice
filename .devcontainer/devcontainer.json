@@ -14,7 +14,8 @@
                 "ms-python.flake8", // Lint
                 "ms-python.mypy-type-checker", // 型チェック
                 "ms-python.black-formatter", // フォーマッタ
-                "ms-python.isort" // importグルーピング・並び順を自動整形
+                "ms-python.isort", // importグルーピング・並び順を自動整形
+                "esbenp.prettier-vscode" // フォーマッタ
             ]
         }
     }

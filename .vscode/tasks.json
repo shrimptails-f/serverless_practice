@@ -2,6 +2,11 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "setup",
+            "type": "shell",
+            "command": "task create-apigateway && task create-table"
+        },
+        {
             "label": "pip freeze",
             "type": "shell",
             "command": "pip freeze > requirements.txt"
