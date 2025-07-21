@@ -18,6 +18,7 @@ tasks:
       - serverless plugin install -n serverless-python-requirements
       - serverless plugin install -n serverless-localstack
       - pip install -r requirements.txt
+      - task aws-configure-setup
       # - chmod +x {{.APP_ROOT}}/.github/hooks/pre-commit
       # - git config core.hooksPath {{.APP_ROOT}}/.github/hooks
       # わざわざコピーする理由は、commit時に毎回メアドとユーザー名の設定(.gitconfigの作成)を求められ面倒なので、git cloneするなら作成済みであろう.gitconfigを使うという魂胆である。
@@ -28,10 +29,11 @@ tasks:
   aws-configure-setup:
     desc: "aws configure setup"
     cmds:
-      - aws configure set aws_access_key_id test
-      - aws configure set aws_secret_access_key test
-      - aws configure set default.region ap-northeast-1
+      - aws configure set aws_access_key_id {$AWS_ACCESS_KEY_ID}
+      - aws configure set aws_secret_access_key {$AWS_SECRET_ACCESS_KEY}
+      - aws configure set default.region {$AWS_REGION}
       - aws configure set default.output json
+      - aws configure list
 
   create-apigateway:
     desc: "create user table"
@@ -56,14 +58,19 @@ tasks:
       - aws dynamodb put-item --table-name Users --item '{"id":{"S":"3"},"name":{"S":"Charlie"},"email":{"S":"charlie@example.com"}}' --endpoint-url http://localstack:4566 --no-paginate --no-cli-pager
 
   local-deploy:
-    desc: "Python版をLocalStackにデプロイ"
+    desc: "LocalStackにデプロイ"
     cmds:
       - serverless deploy --stage dev --force
 
   production-deploy-aws:
-    desc: "Python版を本番AWSにデプロイ"
+    desc: "本番AWSにデプロイ"
     cmds:
-      - serverless deploy --stage prod --force
+      - serverless deploy --stage prod --config serverless.prod.yml
+
+  production-destroy-aws:
+    desc: "本番AWSリソースを削除"
+    cmds:
+      - serverless remove --stage prod --config serverless.prod.yml
 
   lambda-test:
     desc: "Python Lambda関数をテスト"
