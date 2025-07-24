@@ -9,6 +9,7 @@ import boto3
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# ローカル環境
 # DynamoDBクライアント初期化
 DYNAMODB_ENDPOINT_URL = os.environ.get(
     "DYNAMODB_ENDPOINT_URL", "http://localstack:4566"
@@ -27,6 +28,26 @@ dynamodb = boto3.resource(
     aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
 )
 table = dynamodb.Table(TABLE_NAME)
+
+# 本番AWS
+# DynamoDBクライアント初期化
+# DYNAMODB_ENDPOINT_URL = os.environ.get("DYNAMODB_ENDPOINT_URL")
+# AWS_REGION = os.environ.get("AWS_REGION", "ap-northeast-1")
+# TABLE_NAME = os.environ.get("DYNAMODB_TABLE", "lambda-demo-python-dev-users")
+# AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "test")
+# AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "test")
+
+# # DynamoDBクライアント初期化
+# dynamodb_params = {"region_name": AWS_REGION}
+# if DYNAMODB_ENDPOINT_URL:
+#     dynamodb_params["endpoint_url"] = DYNAMODB_ENDPOINT_URL
+#     dynamodb_params["aws_access_key_id"] = os.environ.get("AWS_ACCESS_KEY_ID", "test")
+#     dynamodb_params["aws_secret_access_key"] = os.environ.get(
+#         "AWS_SECRET_ACCESS_KEY", "test"
+#     )
+
+# dynamodb = boto3.resource("dynamodb", **dynamodb_params)
+# table = dynamodb.Table(TABLE_NAME)
 
 
 def create_response(status_code: int, body: Dict[str, Any]) -> Dict[str, Any]:
