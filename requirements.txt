@@ -16,6 +16,7 @@ mypy==1.17.0
 mypy_extensions==1.1.0
 packaging==25.0
 pathspec==0.12.1
+pi==0.1.2
 platformdirs==4.3.8
 pluggy==1.6.0
 pycodestyle==2.14.0
@@ -25,9 +26,11 @@ pylint==3.3.7
 pytest==8.4.1
 pytest-cov==6.2.1
 python-dateutil==2.9.0.post0
+PyYAML==6.0.1
 s3transfer==0.13.1
 six==1.17.0
 tomli==2.2.1
 tomlkit==0.13.3
+types-PyYAML==6.0.12.20250516
 typing_extensions==4.14.1
 urllib3==1.26.20

@@ -5,6 +5,7 @@ provider:
   runtime: python3.9
   stage: dev
   region: ap-northeast-1
+  environment: ${file(src/conf/${self:provider.stage}.yml)}
 
 plugins:
   # - serverless-offline
@@ -18,18 +19,18 @@ custom:
     host: http://localstack
     edgePort: 4566
     apiGateway:
-      restApiId: hqbfcj2rmp
+      restApiId: kpzmbrgvjm
 
 functions:
   hello:
-    handler: handler.hello
+    handler: src.worker.user.hello
     events:
       - http:
           path: hello
           method: get
 
   users:
-    handler: handler.get_users
+    handler: src.worker.user.get_users
     timeout: 30
     memorySize: 128
     events:
@@ -39,7 +40,7 @@ functions:
           cors: true
 
   user:
-    handler: handler.get_user0
+    handler: src.worker.user.get_user
     timeout: 30
     memorySize: 128
     events:
@@ -50,4 +51,4 @@ functions:
 
 package:
   include:
-    - handler.py
+    - src/**

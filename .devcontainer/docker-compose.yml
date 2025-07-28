@@ -24,5 +24,11 @@ services:
       - LAMBDA_REMOVE_CONTAINERS=false
       - LAMBDA_EXECUTOR=docker-reuse
       - LAMBDA_KEEPALIVE_MS=600000
+      - PERSISTENCE=1
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "localstack-data:/var/lib/localstack"
+      - "./localstack:/etc/localstack/init/ready.d"
+
+volumes:
+  localstack-data:

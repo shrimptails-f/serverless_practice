@@ -18,7 +18,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
     vim \
     git \
     keychain \
-    curl && \
+    curl \
+    less && \
     localedef -i ja_JP -c -f UTF-8 -A /usr/share/locale/locale.alias ja_JP.UTF-8
 
 # AWS CLI インストール

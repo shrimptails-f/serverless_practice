@@ -94,11 +94,6 @@ tasks:
         echo "=== User詳細エンドポイントテスト ==="
         curl -v "$BASE_URL/users/1"
 
-  get-users:
-    desc: "Go API Gateway経由でテスト"
-    cmds:
-      - curl http://localstack:4566/restapis/abfgbzrnuc/dev/_user_request_/users
-
   test-api:
     desc: "Go API Gateway経由でテスト"
     cmds:
@@ -119,3 +114,8 @@ tasks:
     desc: "serverless-offlineでテスト"
     cmds:
       - curl -v http://localhost:3000/dev/hello
+
+  localstack-watch:
+    desc: "serverless-offlineでテスト"
+    cmds:
+      - docker logs $(docker ps -q --filter "name=localstack") -f -n 0
