@@ -19,6 +19,8 @@ tasks:
       - serverless plugin install -n serverless-localstack
       - pip install -r requirements.txt
       - task aws-configure-setup
+      - task create-table
+      - task create-user
       # - chmod +x {{.APP_ROOT}}/.github/hooks/pre-commit
       # - git config core.hooksPath {{.APP_ROOT}}/.github/hooks
       # わざわざコピーする理由は、commit時に毎回メアドとユーザー名の設定(.gitconfigの作成)を求められ面倒なので、git cloneするなら作成済みであろう.gitconfigを使うという魂胆である。
@@ -94,7 +96,7 @@ tasks:
         echo "=== User詳細エンドポイントテスト ==="
         curl -v "$BASE_URL/users/1"
 
-  test-api:
+  test-users:
     desc: "Go API Gateway経由でテスト"
     cmds:
       - |

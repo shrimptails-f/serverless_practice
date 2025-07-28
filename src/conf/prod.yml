@@ -1,3 +1,2 @@
 # テーブル名
-TABLES: |
-  USERS: "Users"
+USERS_TABLE: "lambda-demo-python-dev-users"

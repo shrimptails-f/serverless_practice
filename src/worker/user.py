@@ -4,8 +4,6 @@ import os
 import sys
 from typing import Any, Dict
 
-import yaml
-
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from library.dynamo import DynamoDBClient  # noqa: E402
 
@@ -16,11 +14,9 @@ logger = logging.getLogger(__name__)
 # DynamoDBクライアント初期化
 client = DynamoDBClient()
 dynamodb = client.connect()
-tables_data = os.environ.get("TABLES")
-if tables_data is None:
-    raise ValueError("TABLES environment variable is not set")
-tables: Dict[str, Any] = yaml.safe_load(tables_data)
-TABLE_NAME = tables["USERS"]
+TABLE_NAME = os.environ.get("USERS_TABLE")
+if TABLE_NAME is None:
+    raise ValueError("USERS_TABLE environment variable is not set")
 table = dynamodb.Table(TABLE_NAME)
 
 
