@@ -20,20 +20,27 @@ if TABLE_NAME is None:
 table = dynamodb.Table(TABLE_NAME)
 
 
-def create_response(status_code: int, body: Dict[str, Any]) -> Dict[str, Any]:
-    """API Gateway用のレスポンスを生成"""
-    headers = {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-    }
+def hello(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
+    """Hello World エンドポイント"""
+    try:
+        logger.info(f"Event: {json.dumps(event)}")
 
-    return {
-        "statusCode": status_code,
-        "headers": headers,
-        "body": json.dumps(body, ensure_ascii=False),
-    }
+        query_params = event.get("queryStringParameters") or {}
+        name = query_params.get("name", "World")
+
+        response_body = {
+            "message": f"Hello, {name}!",
+            "timestamp": context.aws_request_id,
+            "function_name": context.function_name,
+            "environment": os.environ.get("AWS_LAMBDA_FUNCTION_NAME", "local"),
+        }
+
+        logger.info(f"Response: {response_body}")
+        return create_response(200, response_body)
+
+    except Exception as e:
+        logger.error(f"Error in hello function: {str(e)}")
+        return create_response(500, {"error": "Internal server error"})
 
 
 def get_users(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
@@ -63,29 +70,6 @@ def get_users(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
     except Exception as e:
         logger.error(f"Error in get_users function: {str(e)}")
-        return create_response(500, {"error": "Internal server error"})
-
-
-def hello(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
-    """Hello World エンドポイント"""
-    try:
-        logger.info(f"Event: {json.dumps(event)}")
-
-        query_params = event.get("queryStringParameters") or {}
-        name = query_params.get("name", "World")
-
-        response_body = {
-            "message": f"Hello, {name}!",
-            "timestamp": context.aws_request_id,
-            "function_name": context.function_name,
-            "environment": os.environ.get("AWS_LAMBDA_FUNCTION_NAME", "local"),
-        }
-
-        logger.info(f"Response: {response_body}")
-        return create_response(200, response_body)
-
-    except Exception as e:
-        logger.error(f"Error in hello function: {str(e)}")
         return create_response(500, {"error": "Internal server error"})
 
 
@@ -126,3 +110,19 @@ def get_user(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     except Exception as e:
         logger.error(f"Error in get_user function: {str(e)}")
         return create_response(500, {"error": "Internal server error"})
+
+
+def create_response(status_code: int, body: Dict[str, Any]) -> Dict[str, Any]:
+    """API Gateway用のレスポンスを生成"""
+    headers = {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+    }
+
+    return {
+        "statusCode": status_code,
+        "headers": headers,
+        "body": json.dumps(body, ensure_ascii=False),
+    }

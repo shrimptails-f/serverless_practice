@@ -1,2 +1,3 @@
 # テーブル名
+STAGE: "prod"
 USERS_TABLE: "lambda-demo-python-dev-users"

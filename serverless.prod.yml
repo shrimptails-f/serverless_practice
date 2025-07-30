@@ -22,14 +22,14 @@ plugins:
 
 functions:
   hello:
-    handler: rc.worker.user.hello
+    handler: src.worker.user.hello
     events:
       - http:
           path: hello
           method: get
 
   users:
-    handler: rc.worker.user.get_users
+    handler: src.worker.user.get_users
     timeout: 30
     memorySize: 128
     events:
@@ -39,7 +39,7 @@ functions:
           cors: true
 
   user:
-    handler: rc.worker.user.get_user
+    handler: src.worker.user.get_user
     timeout: 30
     memorySize: 128
     events:

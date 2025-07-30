@@ -5,14 +5,16 @@ from boto3.resources.base import ServiceResource
 
 
 class DynamoDBClient:
-    def __init__(self, is_local: bool = True):
+    is_local = False
+
+    def __init__(self) -> None:
         """
         DynamoDBクライアントを初期化
-
-        Args:
-            is_local: True=ローカル環境(Localstack), False=AWS本番環境
         """
-        self.is_local = is_local
+
+        stage = os.environ.get("STAGE", "dev")
+        if stage == "dev":
+            self.is_local = True
 
     def connect(self) -> ServiceResource:
         """

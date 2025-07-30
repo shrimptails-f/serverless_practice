@@ -64,12 +64,12 @@ tasks:
     cmds:
       - serverless deploy --stage dev --force
 
-  production-deploy-aws:
+  production-deploy:
     desc: "本番AWSにデプロイ"
     cmds:
       - serverless deploy --stage prod --config serverless.prod.yml
 
-  production-destroy-aws:
+  production-destroy:
     desc: "本番AWSリソースを削除"
     cmds:
       - serverless remove --stage prod --config serverless.prod.yml
