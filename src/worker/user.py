@@ -7,44 +7,22 @@ from typing import Any, Dict
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from library.dynamo import DynamoDBClient  # noqa: E402
 
-# ログ設定
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# DynamoDBクライアント初期化
-client = DynamoDBClient()
-dynamodb = client.connect()
-TABLE_NAME = os.environ.get("USERS_TABLE")
-if TABLE_NAME is None:
-    raise ValueError("USERS_TABLE environment variable is not set")
-table = dynamodb.Table(TABLE_NAME)
-
-
-def hello(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
-    """Hello World エンドポイント"""
-    try:
-        logger.info(f"Event: {json.dumps(event)}")
-
-        query_params = event.get("queryStringParameters") or {}
-        name = query_params.get("name", "World")
-
-        response_body = {
-            "message": f"Hello, {name}!",
-            "timestamp": context.aws_request_id,
-            "function_name": context.function_name,
-            "environment": os.environ.get("AWS_LAMBDA_FUNCTION_NAME", "local"),
-        }
-
-        logger.info(f"Response: {response_body}")
-        return create_response(200, response_body)
-
-    except Exception as e:
-        logger.error(f"Error in hello function: {str(e)}")
-        return create_response(500, {"error": "Internal server error"})
-
 
 def get_users(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """ユーザー一覧取得エンドポイント"""
+
+    # ログ設定
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    # DynamoDBクライアント初期化
+    client = DynamoDBClient()
+    dynamodb = client.connect()
+    TABLE_NAME = os.environ.get("USERS_TABLE")
+    if TABLE_NAME is None:
+        raise ValueError("USERS_TABLE environment variable is not set")
+    table = dynamodb.Table(TABLE_NAME)
+
     try:
         logger.info(f"Event: {json.dumps(event)}")
 
@@ -75,6 +53,19 @@ def get_users(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
 def get_user(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """特定ユーザー取得エンドポイント"""
+
+    # ログ設定
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    # DynamoDBクライアント初期化
+    client = DynamoDBClient()
+    dynamodb = client.connect()
+    TABLE_NAME = os.environ.get("USERS_TABLE")
+    if TABLE_NAME is None:
+        raise ValueError("USERS_TABLE environment variable is not set")
+    table = dynamodb.Table(TABLE_NAME)
+
     try:
         logger.info(f"Event: {json.dumps(event)}")
 

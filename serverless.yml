@@ -23,7 +23,7 @@ custom:
 
 functions:
   hello:
-    handler: src.worker.user.hello
+    handler: src.worker.sample.hello
     events:
       - http:
           path: hello
