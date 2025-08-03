@@ -1,0 +1,33 @@
+service: dynamo
+
+provider:
+  name: aws
+  stage: dev
+  region: ap-northeast-1
+  environment: ${file(conf/${self:provider.stage}.yml)}
+
+plugins:
+  - serverless-localstack
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+custom:
+  localstack:
+    stages:
+      - dev
+    host: http://localstack
+    edgePort: 4566
+    services:
+      - dynamodb

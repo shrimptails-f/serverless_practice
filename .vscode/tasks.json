@@ -17,9 +17,34 @@
             "command": "pip install -r requirements.txt"
         },
         {
-            "label": "ローカルデプロイ",
+            "label": "ローカル DynamoDB デプロイ",
+            "type": "shell",
+            "command": "task local-dynamodb-deploy"
+        },
+        {
+            "label": "ローカル デプロイ",
             "type": "shell",
             "command": "task local-deploy"
+        },
+        {
+            "label": "本番 DynamoDB デプロイ",
+            "type": "shell",
+            "command": "task production-dynamodb-deploy"
+        },
+        {
+            "label": "本番 DynamoDB リソース削除",
+            "type": "shell",
+            "command": "task production-dynamodb-destroy"
+        },
+        {
+            "label": "本番 デプロイ",
+            "type": "shell",
+            "command": "task production-deploy"
+        },
+        {
+            "label": "本番 リソース削除",
+            "type": "shell",
+            "command": "task production-destroy"
         },
         // {
         //     "label": "offline start",

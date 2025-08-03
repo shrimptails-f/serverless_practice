@@ -18,7 +18,7 @@ services:
     ports:
       - ${LOCALSTACK_PORT}:4566
     environment:
-      - SERVICES=lambda,apigateway,dynamodb,cloudformation,s3,iam,sts,logs
+      - SERVICES=lambda,apigateway,dynamodb,cloudformation,s3,iam,sts,logs,ecr
       - DEBUG=1
       - LAMBDA_DOCKER_FLAGS=-e DOCKER_LAMBDA_STAY_OPEN=1
       - LAMBDA_REMOVE_CONTAINERS=false
