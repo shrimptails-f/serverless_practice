@@ -5,7 +5,7 @@ provider:
   runtime: python3.9
   stage: prod
   region: ap-northeast-1
-  environment: ${file(lambda/conf/${self:provider.stage}.yml)}
+  environment: ${file(conf/${self:provider.stage}.yml)}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -22,14 +22,14 @@ plugins:
 
 functions:
   hello:
-    handler: lambda.worker.sample.hello
+    handler: worker.sample.hello
     events:
       - http:
           path: hello
           method: get
 
   users:
-    handler: lambda.worker.user.get_users
+    handler: worker.user.get_users
     timeout: 30
     memorySize: 128
     events:
@@ -39,7 +39,7 @@ functions:
           cors: true
 
   user:
-    handler: lambda.worker.user.get_user
+    handler: worker.user.get_user
     timeout: 30
     memorySize: 128
     events:
@@ -50,4 +50,4 @@ functions:
 
 package:
   include:
-    - src/**
+    - /**

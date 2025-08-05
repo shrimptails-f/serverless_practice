@@ -14,10 +14,10 @@ tasks:
       - cp {{.APP_ROOT}}/.gitconfig /root/.gitconfig
       - git config --global core.autocrlf input
       - git config --global --add safe.directory {{.APP_ROOT}}
-      - npm install
-      - serverless plugin install -n serverless-python-requirements
-      - serverless plugin install -n serverless-localstack
-      - pip install -r requirements.txt
+      - cd lambda && npm install
+      - cd lambda && serverless plugin install -n serverless-python-requirements
+      - cd lambda && serverless plugin install -n serverless-localstack
+      - cd lambda && pip install -r requirements.txt
       - task aws-configure-setup
       # - chmod +x {{.APP_ROOT}}/.github/hooks/pre-commit
       # - git config core.hooksPath {{.APP_ROOT}}/.github/hooks
@@ -61,27 +61,27 @@ tasks:
   local-deploy:
     desc: "LocalStackにデプロイ"
     cmds:
-      - serverless deploy --stage dev --force
+      - cd lambda && serverless deploy --stage dev --force --config serverless.yml
 
   local-destroy:
     desc: "LocalStack リソース削除"
     cmds:
-      - serverless remove --stage dev --force
+      - cd lambda && serverless remove --stage dev --force
 
   production-deploy:
     desc: "本番AWSにデプロイ"
     cmds:
-      - serverless deploy --stage prod --config serverless.prod.yml
+      - cd lambda && serverless deploy --stage prod --config serverless.prod.yml
 
   production-destroy:
     desc: "本番AWSリソースを削除"
     cmds:
-      - serverless remove --stage prod --config serverless.prod.yml
+      - cd lambda && serverless remove --stage prod --config serverless.prod.yml
 
   lambda-test:
     desc: "Python Lambda関数をテスト"
     cmds:
-      - pytest tests/ -v
+      - cd lambda && pytest tests/ -v
 
   test-api-dynamic:
     desc: "API IDを動的に取得してテスト"

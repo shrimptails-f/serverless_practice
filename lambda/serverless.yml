@@ -5,7 +5,7 @@ provider:
   runtime: python3.9
   stage: dev
   region: ap-northeast-1
-  environment: ${file(lambda/conf/${self:provider.stage}.yml)}
+  environment: ${file(conf/${self:provider.stage}.yml)}
 
 plugins:
   # - serverless-offline
@@ -23,14 +23,14 @@ custom:
 
 functions:
   hello:
-    handler: lambda.worker.Sample.hello
+    handler: worker.Sample.hello
     events:
       - http:
           path: hello
           method: get
 
   users:
-    handler: lambda.worker.User.get_users
+    handler: worker.User.get_users
     timeout: 30
     memorySize: 128
     events:
@@ -40,7 +40,7 @@ functions:
           cors: true
 
   user:
-    handler: lambda.worker.User.get_user
+    handler: worker.User.get_user
     timeout: 30
     memorySize: 128
     events:
@@ -51,4 +51,10 @@ functions:
 
 package:
   include:
-    - lambda/**
+    - /library
+    - /repository
+    - /worker
+  exclude:
+    - /node_module
+    - /.serverless
+    - /__pycache__
