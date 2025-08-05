@@ -5,7 +5,8 @@ from typing import Any, Dict
 from unittest.mock import Mock, patch
 
 # テスト対象のモジュールをインポート
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
 
 from worker.Sample import hello  # noqa: E402
 
