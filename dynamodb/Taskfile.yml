@@ -19,6 +19,18 @@ tasks:
     cmds:
       - cd dynamodb && serverless remove --stage dev --config serverless.yml
 
+  production-deploy-aws:
+    desc: "Python版を本番AWSにデプロイ"
+    desc: "本番AWSにデプロイ"
+    cmds:
+      - serverless deploy --stage prod --force
+      - serverless deploy --stage prod --config serverless.prod.yml
+
+  production-destroy-aws:
+    desc: "本番AWSリソースを削除"
+    cmds:
+      - serverless remove --stage prod --config serverless.prod.yml
+
   show-user-table:
     desc: "show-user-table"
     cmds:
