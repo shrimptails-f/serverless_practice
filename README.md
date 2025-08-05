@@ -87,6 +87,8 @@ AWS_REGION=
 
 ### DynamoDB へテーブル作成を行う。
 
+※テーブル作成後レコードは手動で作成する必要があります。AWS マネジメントコンソールから UI をポチポチ操作するか、コマンドで追加できます。
+
 ```
 cd /data/dynamodb
 task production-deploy-aws
