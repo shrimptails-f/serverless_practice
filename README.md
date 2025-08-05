@@ -52,6 +52,8 @@ Ctrl Shift P → Reopen in container と入力して実行
 
 ### DynamoDB へテーブル作成を行う。
 
+※レコード作成も行っています。
+
 ```bash
 cd /data/dynamodb
 task local-dynamodb-deploy
