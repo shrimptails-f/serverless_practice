@@ -85,7 +85,7 @@ AWS_SECRET_ACCESS_KEY=
 AWS_REGION=
 ```
 
-### Lambda にデプロイする。
+### DynamoDB へテーブル作成を行う。
 
 ```
 cd /data/dynamodb
