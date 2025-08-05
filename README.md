@@ -101,6 +101,8 @@ task production-deploy
 
 ## リソースの削除手順
 
+維持するだけでもコストが掛かるので、動作確認ができたらその日のうちに削除するようにしましょう。
+
 ```
 cd dynamodb
 task production-destroy-aws
