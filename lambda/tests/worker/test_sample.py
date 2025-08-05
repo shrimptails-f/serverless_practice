@@ -6,7 +6,8 @@ from unittest.mock import Mock, patch
 
 # テスト対象のモジュールをインポート
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from worker.sample import hello  # noqa: E402
+
+from worker.Sample import hello  # noqa: E402
 
 
 class TestHelloFunction:

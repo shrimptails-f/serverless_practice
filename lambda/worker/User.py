@@ -5,7 +5,9 @@ import sys
 from typing import Any, Dict
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
 from library.dynamo import DynamoDBClient  # noqa: E402
+from repository.UserRepository import UserRepository  # noqa: E402
 
 
 def get_users(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
@@ -15,27 +17,12 @@ def get_users(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    # DynamoDBクライアント初期化
-    client = DynamoDBClient()
-    dynamodb = client.connect()
-    TABLE_NAME = os.environ.get("USERS_TABLE")
-    if TABLE_NAME is None:
-        raise ValueError("USERS_TABLE environment variable is not set")
-    table = dynamodb.Table(TABLE_NAME)
-
     try:
         logger.info(f"Event: {json.dumps(event)}")
 
-        # DynamoDBからユーザー一覧を取得
-        response = table.scan()
-        items = response.get("Items", [])
-
-        # DynamoDBのデータ形式を変換
-        users = []
-        for item in items:
-            users.append(
-                {"id": int(item["id"]), "name": item["name"], "email": item["email"]}
-            )
+        # Repository経由でユーザー一覧取得
+        ur = UserRepository()
+        users = ur.get_all_users()
 
         response_body = {
             "users": users,
@@ -62,8 +49,6 @@ def get_user(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     client = DynamoDBClient()
     dynamodb = client.connect()
     TABLE_NAME = os.environ.get("USERS_TABLE")
-    if TABLE_NAME is None:
-        raise ValueError("USERS_TABLE environment variable is not set")
     table = dynamodb.Table(TABLE_NAME)
 
     try:

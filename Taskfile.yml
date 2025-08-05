@@ -100,6 +100,14 @@ tasks:
         echo "=== User詳細エンドポイントテスト ==="
         curl -v "$BASE_URL/users/1"
 
+  test-hello:
+    desc: "Go API Gateway経由でテスト"
+    cmds:
+      - |
+        ENDPOINT=$(serverless info --stage dev | grep "endpoint:" | awk '{print $2}' | sed 's/localhost/localstack/')
+        echo "Testing: $ENDPOINT/hello"
+        curl -v "$ENDPOINT/hello"
+
   test-users:
     desc: "Go API Gateway経由でテスト"
     cmds:
