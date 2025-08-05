@@ -22,7 +22,8 @@
 
 ## ディレクトリ構成
 
-```project root
+```text
+project root
 ├── .devcontainer 環境構築資材
 ├── .vscode エディタの設定ファイル
 ├── dynamodb DynamoDB関連のデプロイ資材
@@ -51,23 +52,22 @@ Ctrl Shift P → Reopen in container と入力して実行
 
 ### DynamoDB へテーブル作成を行う。
 
-```
-cd dynamodb
+```bash
+cd /data/dynamodb
 task local-dynamodb-deploy
 ```
 
 ### Lambda にデプロイする。
 
-```
-cd lambda
+```bash
+cd /data/lambda
 task local-deploy
 ```
 
 ### ローカルで動作確認を行う
 
 ```
-pwd
-/data/lambda
+cd /data/lambda
 
 task test-users
 ```
@@ -88,14 +88,14 @@ AWS_REGION=
 ### Lambda にデプロイする。
 
 ```
-cd dynamodb
+cd /data/dynamodb
 task production-deploy-aws
 ```
 
 ### Lambda にデプロイする。
 
 ```
-cd lambda
+cd /data/lambda
 task production-deploy
 ```
 
@@ -104,9 +104,9 @@ task production-deploy
 維持するだけでもコストが掛かるので、動作確認ができたらその日のうちに削除するようにしましょう。
 
 ```
-cd dynamodb
+cd /data/dynamodb
 task production-destroy-aws
 
-cd lambda
+cd /data/lambda
 task production-destroy
 ```
