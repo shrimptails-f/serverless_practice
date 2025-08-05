@@ -56,6 +56,7 @@
         "tomlkit",
         "urllib",
         "KEEPALIVE",
+        "pycache",
         // MySQL / SQL関連
         "aidarkhanov",
         "dsn",

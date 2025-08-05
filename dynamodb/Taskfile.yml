@@ -8,14 +8,16 @@ env:
   LOCALSTACK_HOST: http://localstack
 
 tasks:
-  aws-configure-setup:
-    desc: "aws configure setup"
+  local-dynamodb-deploy:
+    desc: "LocalStackにDynamoDBをデプロイ"
     cmds:
-      - aws configure set aws_access_key_id {$AWS_ACCESS_KEY_ID}
-      - aws configure set aws_secret_access_key {$AWS_SECRET_ACCESS_KEY}
-      - aws configure set default.region {$AWS_REGION}
-      - aws configure set default.output json
-      - aws configure list
+      - cd dynamodb && serverless deploy --stage dev --force --config serverless.yml
+      - task create-user
+
+  local-dynamodb-destroy:
+    desc: "LocalStackのDynamoDBを削除"
+    cmds:
+      - cd dynamodb && serverless remove --stage dev --config serverless.yml
 
   show-user-table:
     desc: "show-user-table"
@@ -28,14 +30,3 @@ tasks:
       - aws dynamodb put-item --table-name Users --item '{"id":{"S":"1"},"name":{"S":"Alice"},"email":{"S":"alice@example.com"}}' --endpoint-url http://localstack:4566 --no-paginate --no-cli-pager
       - aws dynamodb put-item --table-name Users --item '{"id":{"S":"2"},"name":{"S":"Bob"},"email":{"S":"bob@example.com"}}' --endpoint-url http://localstack:4566 --no-paginate --no-cli-pager
       - aws dynamodb put-item --table-name Users --item '{"id":{"S":"3"},"name":{"S":"Charlie"},"email":{"S":"charlie@example.com"}}' --endpoint-url http://localstack:4566 --no-paginate --no-cli-pager
-
-  local-dynamodb-deploy:
-    desc: "LocalStackにDynamoDBをデプロイ"
-    cmds:
-      - cd dynamodb && serverless deploy --stage dev --force --config serverless.yml
-      - task create-user
-
-  local-dynamodb-destroy:
-    desc: "LocalStackのDynamoDBを削除"
-    cmds:
-      - cd dynamodb && serverless remove --stage dev --config serverless.yml
